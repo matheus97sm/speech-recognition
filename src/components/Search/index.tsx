@@ -1,58 +1,66 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 import { FaSearch, FaMicrophone } from 'react-icons/fa';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { SearchContext } from '../../SearchContext';
 
-import { api } from '../../services/api';
 import { Container, SearchForm } from "./styles";
 
 export function Search() {
-  const [message, setMessage] = useState('');
+  const { searchInWikipedia } = useContext(SearchContext);
+
   const [search, setSearch] = useState('');
-  // const [response, setResponse] = useState('');
+  const [isListeningToMicrophone, setIsListeningToMicrophone] = useState(false);
 
   const commands = [
     {
       command: 'Search for *',
       callback: (searchSpeech: string) => {
-        setMessage(`You searched for: ${searchSpeech}`)
-        setSearch(searchSpeech);
+        searchInWikipedia(searchSpeech);
       }
     }
   ];
-  const { transcript, finalTranscript } = useSpeechRecognition({ commands });
+  const { transcript, finalTranscript, resetTranscript } = useSpeechRecognition({ commands });
 
   async function listenToSpeech() {
     if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
       return alert(`Your browser don't support Speech Recognition.`)
     }
 
+    if (isListeningToMicrophone) {
+      setIsListeningToMicrophone(false);
+
+      return SpeechRecognition.stopListening();
+    }
+
+    setSearch('');
+    setIsListeningToMicrophone(true);
+
     await SpeechRecognition.startListening({ language: 'en-US' });
   }
 
   useEffect(() => {
-    if (search !== '') {
-      api.get(`api.php?format=json&origin=*&action=query&prop=extracts&explaintext=1&titles=${search}`)
-        .then(response => {
-          const getTheDescription = response.data.query.pages[Object.keys(response.data.query.pages)[0]].extract;
-          const newMessage = `${getTheDescription.split('.')[0]}.`;
-
-          setMessage(newMessage);
-        });
-    }
-  }, [search]);
+    setIsListeningToMicrophone(false);
+    resetTranscript();
+  }, [finalTranscript, resetTranscript])
 
   function handleSearchForSomething(event: FormEvent) {
     event.preventDefault();
+
+    searchInWikipedia(search);
   }
 
   return (
     <Container>
-      <SearchForm onSubmit={handleSearchForSomething}>
+      <SearchForm
+        onSubmit={handleSearchForSomething}
+        isListeningToMicrophone={isListeningToMicrophone}
+      >
         <input
           type="text"
-          placeholder="Try to search for something like: pizza!"
-          value={transcript}
-          readOnly
+          placeholder={transcript || "Try to search for something like: pizza!"}
+          value={search}
+          onChange={event => setSearch(event.target.value)}
+          readOnly={isListeningToMicrophone}
         />
 
         <div>
@@ -60,13 +68,14 @@ export function Search() {
             <FaMicrophone />
           </button>
 
-          <button type="submit">
+          <button
+            type="submit"
+            disabled={isListeningToMicrophone}
+          >
             <FaSearch />
           </button>
         </div>
       </SearchForm>
-
-      <p>{message}</p>
     </Container>
   )
 }

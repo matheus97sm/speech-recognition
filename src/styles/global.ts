@@ -28,4 +28,10 @@ export const GlobalStyle = createGlobalStyle`
   button {
     cursor: pointer;
   }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: var(--grey);
+  }
 `;

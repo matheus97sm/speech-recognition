@@ -6,7 +6,17 @@ export const Container = styled.div`
   margin: 0 auto;
 `;
 
-export const SearchForm = styled.form`
+interface SearchFormProps {
+  isListeningToMicrophone: boolean
+}
+
+const colors = {
+  green: '#04D9C4',
+  grey: 'var(--grey)',
+  lightGrey: 'var(--lightGrey)'
+}
+
+export const SearchForm = styled.form<SearchFormProps>`
   width: 100%;
   display: flex;
   gap: 1rem;
@@ -18,12 +28,15 @@ export const SearchForm = styled.form`
     height: 2rem;
     padding: 0.25rem 1rem;
 
+    background-color: ${props => props.isListeningToMicrophone ? '#ccc' : '#fff'};
     box-shadow: 0 0 5px rgba(0, 0, 0, .1);
     border: none;
-    border-radius: .25rem;
+    border-radius: .25rem;    
+
+    transition: .3s background-color;
 
     &::placeholder {
-      color: var(--lightGrey);
+      color: ${props => props.isListeningToMicrophone ? colors.grey : colors.lightGrey};
     }
   }
 
@@ -44,9 +57,25 @@ export const SearchForm = styled.form`
     border: none;
     border-radius: .25rem;
 
+    transition: .3s background-color;
+
+    &[type="button"] {
+      background-color: ${props => props.isListeningToMicrophone ? colors.green : '#fff'};
+
+      svg {
+        fill: ${props => props.isListeningToMicrophone ? '#fff' : colors.grey};
+      }
+    }
+
+    &[type="submit"] {
+      background-color: ${props => props.isListeningToMicrophone ? '#ccc' : '#fff'};
+      cursor: not-allowed;
+    }
+
     svg {
       fill: var(--grey);
       font-size: 1rem;
+      transition: .3s fill;
     }
   }
   }
