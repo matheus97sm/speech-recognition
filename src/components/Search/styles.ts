@@ -17,7 +17,7 @@ const colors = {
 }
 
 export const SearchForm = styled.form<SearchFormProps>`
-  width: 100%;
+  width: 90%;
   display: flex;
   gap: 1rem;
   justify-content: space-between;
