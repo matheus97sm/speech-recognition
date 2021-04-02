@@ -23,5 +23,9 @@ export const Container = styled.div<SearchTipProps>`
 
   p {
     text-align: center;
+
+    strong {
+      color: var(--green);
+    }
   }
 `;

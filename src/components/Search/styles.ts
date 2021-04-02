@@ -11,7 +11,7 @@ interface SearchFormProps {
 }
 
 const colors = {
-  green: '#04D9C4',
+  green: 'var(--green)',
   grey: 'var(--grey)',
   lightGrey: 'var(--lightGrey)'
 }
@@ -69,7 +69,7 @@ export const SearchForm = styled.form<SearchFormProps>`
 
     &[type="submit"] {
       background-color: ${props => props.isListeningToMicrophone ? '#ccc' : '#fff'};
-      cursor: not-allowed;
+      cursor: ${props => props.isListeningToMicrophone && 'not-allowed'};
     }
 
     svg {

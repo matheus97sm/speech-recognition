@@ -31,7 +31,7 @@ export function SearchProvider({ children }: SearchProviderProps) {
       api.get(`api.php?format=json&origin=*&action=query&prop=extracts&explaintext=1&titles=${search}`)
         .then(response => {
           const getTheDescription = response.data.query.pages[Object.keys(response.data.query.pages)[0]].extract;
-          const newMessage = `${getTheDescription.split('.')[0]}.`;
+          const newMessage = `${getTheDescription ? getTheDescription.split('.')[0] : `Sorry, we didn't find what you're looking for`}.`;
 
           setMessage(newMessage);
         });
