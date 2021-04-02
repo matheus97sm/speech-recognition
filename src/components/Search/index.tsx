@@ -6,7 +6,7 @@ import { SearchContext } from '../../SearchContext';
 import { Container, SearchForm } from "./styles";
 
 export function Search() {
-  const { searchInWikipedia } = useContext(SearchContext);
+  const { searchInWikipedia, handleSearchHelp } = useContext(SearchContext);
 
   const [search, setSearch] = useState('');
   const [isListeningToMicrophone, setIsListeningToMicrophone] = useState(false);
@@ -25,6 +25,8 @@ export function Search() {
     if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
       return alert(`Your browser don't support Speech Recognition.`)
     }
+
+    handleSearchHelp();
 
     if (isListeningToMicrophone) {
       setIsListeningToMicrophone(false);

@@ -8,8 +8,10 @@ interface SearchProviderProps {
 interface SearchContextData {
   message: string
   searchWord: string
+  searchHelp: boolean
   searchInWikipedia: (search: string) => void
   setSearchErrorMessage: (error: string) => void
+  handleSearchHelp: () => void
 }
 
 export const SearchContext = createContext<SearchContextData>(
@@ -18,7 +20,8 @@ export const SearchContext = createContext<SearchContextData>(
 
 export function SearchProvider({ children }: SearchProviderProps) {
   const [message, setMessage] = useState('');
-  const [searchWord, setSearchWord] = useState('')
+  const [searchWord, setSearchWord] = useState('');
+  const [searchHelp, setSearchHelp] = useState(false);
 
   function searchInWikipedia(search: string) {
     if (search !== '') {
@@ -35,6 +38,10 @@ export function SearchProvider({ children }: SearchProviderProps) {
     }
   }
 
+  function handleSearchHelp() {
+    setSearchHelp(true);
+  }
+
   function setSearchErrorMessage(error: string) {
     setMessage(error);
   }
@@ -44,8 +51,10 @@ export function SearchProvider({ children }: SearchProviderProps) {
       value={{
         message,
         searchWord,
+        searchHelp,
         searchInWikipedia,
-        setSearchErrorMessage
+        setSearchErrorMessage,
+        handleSearchHelp
       }}>
       {children}
     </SearchContext.Provider>
