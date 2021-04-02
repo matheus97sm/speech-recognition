@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 100%;
+  width: 90%;
   max-width: 1080px;
   margin: 0 auto;
 `;
@@ -17,7 +17,7 @@ const colors = {
 }
 
 export const SearchForm = styled.form<SearchFormProps>`
-  width: 90%;
+  width: 100%;
   display: flex;
   gap: 1rem;
   justify-content: space-between;
